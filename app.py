@@ -3,6 +3,22 @@ from flask_sqlalchemy import SQLAlchemy
 import datetime
 import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+app = Flask(__name__)
+
+# --- CONFIGURACIÓN DE BASE DE DATOS INTELIGENTE ---
+database_uri = os.environ.get('DATABASE_URL')
+if database_uri and database_uri.startswith("postgres://"):
+    # Usa la base de datos de Heroku (PostgreSQL)
+    database_uri = database_uri.replace("postgres://", "postgresql://", 1)
+else:
+    # Usa la base de datos local (SQLite)
+    database_uri = 'sqlite:///' + os.path.join(basedir, 'instance', 'alldesk.db')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
 # --- CONFIGURACIÓN ---
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
