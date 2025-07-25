@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Contacto - AllDesk.ai</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em auto; max-width: 600px; color: #333; }
+        .container { border: 1px solid #ddd; padding: 2em; border-radius: 8px; }
+        .form-group { margin-bottom: 1em; }
+        label { display: block; margin-bottom: 0.5em; font-weight: bold; }
+        input, textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 12px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; font-size: 1em; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contáctanos</h1>
+        <p>Envíanos tu consulta, reclamo o sugerencia y te responderemos a la brevedad.</p>
+        <form method="post">
+            <div class="form-group">
+                <label for="cliente_nombre">Tu Nombre</label>
+                <input type="text" id="cliente_nombre" name="cliente_nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="asunto">Asunto</label>
+                <input type="text" id="asunto" name="asunto" required>
+            </div>
+            <div class="form-group">
+                <label for="mensaje">Mensaje</label>
+                <textarea id="mensaje" name="mensaje" rows="6" required></textarea>
+            </div>
+            <button type="submit">Enviar Mensaje</button>
+        </form>
+    </div>
+</body>
+</html>
