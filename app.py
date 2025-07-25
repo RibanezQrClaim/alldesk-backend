@@ -6,7 +6,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
-# --- CONFIGURACIÓN DE BASE DE DATOS INTELIGENTE ---
+# --- CONFIGURACIÓN DE BASE DE DATOS INTELIGENTE (LA ÚNICA Y CORRECTA) ---
 database_uri = os.environ.get('DATABASE_URL')
 if database_uri and database_uri.startswith("postgres://"):
     # Usa la base de datos de Heroku (PostgreSQL)
@@ -19,12 +19,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# --- CONFIGURACIÓN ---
-basedir = os.path.abspath(os.path.dirname(__file__))
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'instance', 'alldesk.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 
 # --- MODELOS DE LA BASE DE DATOS ---
 class Usuario(db.Model):
@@ -145,7 +139,6 @@ def pagina_contacto():
 def pagina_gracias():
     return render_template('gracias.html')
 
-# ===== NUEVA RUTA PARA RECIBIR EMAILS DE MAILGUN =====
 @app.route('/webhooks/email', methods=['POST'])
 def recibir_email_webhook():
     sender = request.form.get('sender')
@@ -162,26 +155,14 @@ def recibir_email_webhook():
         next_id = 1
     nuevo_id_publico = f"T-00{next_id}"
     
-    nuevo_ticket = Ticket(
-        id_publico=nuevo_id_publico,
-        cliente_nombre=sender,
-        asunto=subject,
-        tipo='Consulta',
-        canal_nombre='Email',
-        id_sac_asignado=None
-    )
-    
-    primer_mensaje = Mensaje(
-        contenido=body,
-        ticket_asociado=nuevo_ticket
-    )
+    nuevo_ticket = Ticket(id_publico=nuevo_id_publico, cliente_nombre=sender, asunto=subject, tipo='Consulta', canal_nombre='Email', id_sac_asignado=None)
+    primer_mensaje = Mensaje(contenido=body, ticket_asociado=nuevo_ticket)
 
     db.session.add(nuevo_ticket)
     db.session.add(primer_mensaje)
     db.session.commit()
 
     return "OK", 200
-
 
 # --- COMANDO PARA INICIALIZAR LA BASE DE DATOS ---
 @app.cli.command("seed-db")
@@ -204,7 +185,6 @@ def seed_db_command():
     db.session.add_all([user1, user2, ticket1, ticket2, msg1_t1, msg2_t1, msg1_t2, msg2_t2])
     db.session.commit()
     print("Base de datos reiniciada y poblada con datos de ejemplo.")
-
 
 if __name__ == '__main__':
     app.run(debug=True)
