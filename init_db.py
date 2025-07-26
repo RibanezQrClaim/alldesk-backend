@@ -1,18 +1,6 @@
-import sqlite3
+from app import app
+from models import db
 
-conn = sqlite3.connect('instance/alldesk.db')
-c = conn.cursor()
-
-c.execute('''
-    CREATE TABLE IF NOT EXISTS tickets (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        remitente TEXT,
-        asunto TEXT,
-        cuerpo TEXT,
-        fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-''')
-
-conn.commit()
-conn.close()
-print("Tabla 'tickets' creada o verificada con éxito.")
+with app.app_context():
+    db.create_all()
+    print("Tablas creadas correctamente en PostgreSQL.")
