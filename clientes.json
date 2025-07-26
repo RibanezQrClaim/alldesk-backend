@@ -1,0 +1,10 @@
+[
+  {
+    "nombre": "Cliente A",
+    "info_contexto": "Información clave para el LLM sobre Cliente A"
+  },
+  {
+    "nombre": "Cliente B",
+    "info_contexto": "Visión, tono de voz y detalles históricos de Cliente B"
+  }
+]
