@@ -49,7 +49,7 @@
                 <td><a href="{{ url_for('ver_ticket', ticket_id_publico=ticket.id_publico) }}">{{ ticket.id_publico }}</a></td>
                 <td>{{ ticket.tipo }}</td>
                 <td>{{ ticket.prioridad }}</td>
-                <td class="{% if ticket.urgencia >= 4 %}urgente{% endif %}">{{ ticket.urgencia }}</td>
+                <td class="{% if ticket.urgencia and ticket.urgencia.isdigit() and ticket.urgencia|int >= 4 %}urgente{% endif %}">{{ ticket.urgencia }}</td>
                 <td class="{{ ticket.sentimiento|lower }}">{{ ticket.sentimiento }}</td>
                 <td>{{ ticket.fecha_creacion.strftime('%Y-%m-%d %H:%M') }}</td>
                 <td>{{ ticket.cliente_nombre }}</td>
