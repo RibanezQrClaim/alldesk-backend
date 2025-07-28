@@ -3,15 +3,15 @@ from models import Ticket, Mensaje, Cliente
 from llm_client import analizar_mensaje_llm
 import datetime
 
+# Cargar contexto general si no existe contexto del cliente
+with open("contexto_empresa.txt", "r", encoding="utf-8") as f:
+    CONTEXTO_EMPRESA = f.read()
+
 def procesar_ticket_entrante(remitente, asunto, cuerpo, canal):
     cliente = Cliente.query.filter_by(nombre=remitente).first()
-    contexto = cliente.info_contexto if cliente else None
+    contexto = cliente.info_contexto if cliente and cliente.info_contexto else CONTEXTO_EMPRESA
 
-    mensaje_completo = (
-        f"Idioma: Español.\n"
-        f"Por favor, responde todos los campos del análisis exclusivamente en español.\n"
-        f"Asunto: {asunto}\n\nMensaje:\n{cuerpo}"
-    )
+    mensaje_completo = f"Asunto: {asunto}\n\nMensaje:\n{cuerpo}"
     analisis = analizar_mensaje_llm(mensaje_completo, contexto_cliente=contexto)
 
     tipo = analisis.get("tipo", "Consulta")
@@ -43,10 +43,10 @@ def procesar_ticket_entrante(remitente, asunto, cuerpo, canal):
     )
 
     db.session.add(nuevo_ticket)
-    db.session.flush()
+    db.session.flush()  # Para obtener nuevo_ticket.id antes del commit
+
     primer_mensaje = Mensaje(contenido=cuerpo, id_ticket=nuevo_ticket.id)
     db.session.add(primer_mensaje)
     db.session.commit()
 
     return nuevo_ticket
-
