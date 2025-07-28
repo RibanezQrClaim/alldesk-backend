@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 LLM_API_KEY = os.getenv("LLM_API_KEY")
@@ -28,5 +29,10 @@ Mensaje:
 
     response = requests.post(OPENROUTER_API_URL, headers=headers, json=body)
     response.raise_for_status()
-    return response.json()["choices"][0]["message"]["content"]
+    content = response.json()["choices"][0]["message"]["content"]
+
+    try:
+        return json.loads(content)  # Devuelve dict para procesar
+    except json.JSONDecodeError:
+        return content  # Si no es JSON válido, devuelve texto
 
