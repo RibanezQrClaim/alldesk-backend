@@ -18,25 +18,24 @@ class Cliente(db.Model):
     info_contexto = db.Column(db.Text)
 
 class Ticket(db.Model):
-    __tablename__ = 'ticket'
     id = db.Column(db.Integer, primary_key=True)
     id_publico = db.Column(db.String(20), unique=True, nullable=False)
-    tipo = db.Column(db.String(50), nullable=False)
-    cliente_nombre = db.Column(db.String(150), nullable=False)
-    asunto = db.Column(db.String(250), nullable=False)
-    estado = db.Column(db.String(50), default='Abierto')
+    tipo = db.Column(db.String(50))            # Cambiar a String si no está así
+    cliente_nombre = db.Column(db.String(100))
+    asunto = db.Column(db.String(255))
+    estado = db.Column(db.String(50))
     canal_nombre = db.Column(db.String(50))
     fecha_creacion = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     fecha_cierre = db.Column(db.DateTime, nullable=True)
-    prioridad = db.Column(db.String(20), default='Normal')
-    clasificacion = db.Column(db.String(100), default='Otro')
-    sentimiento = db.Column(db.String(20), default='Neutro')
-    urgencia = db.Column(db.Integer, default=3)
+    prioridad = db.Column(db.String(50))       # Cambiar a String
+    clasificacion = db.Column(db.String(100)) # Cambiar a String
+    sentimiento = db.Column(db.String(50))     # Cambiar a String
+    urgencia = db.Column(db.String(50))        # Cambiar a String
     resumen = db.Column(db.Text)
     tags = db.Column(db.String(255))
-    cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id_cliente'), nullable=True)
-    id_sac_asignado = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'), nullable=True)
-    historial = db.relationship('Mensaje', backref='ticket_asociado', lazy=True, cascade="all, delete-orphan")
+    cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'))
+    id_sac_asignado = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+
 
 class Mensaje(db.Model):
     __tablename__ = 'mensaje'
