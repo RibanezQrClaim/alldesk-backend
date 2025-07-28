@@ -18,24 +18,25 @@ class Cliente(db.Model):
     info_contexto = db.Column(db.Text)
 
 class Ticket(db.Model):
+    __tablename__ = 'ticket'
     id = db.Column(db.Integer, primary_key=True)
     id_publico = db.Column(db.String(20), unique=True, nullable=False)
-    tipo = db.Column(db.String(50))            # Cambiar a String si no está así
+    tipo = db.Column(db.String(50))
     cliente_nombre = db.Column(db.String(100))
     asunto = db.Column(db.String(255))
     estado = db.Column(db.String(50))
     canal_nombre = db.Column(db.String(50))
     fecha_creacion = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     fecha_cierre = db.Column(db.DateTime, nullable=True)
-    prioridad = db.Column(db.String(50))       # Cambiar a String
-    clasificacion = db.Column(db.String(100)) # Cambiar a String
-    sentimiento = db.Column(db.String(50))     # Cambiar a String
-    urgencia = db.Column(db.String(50))        # Cambiar a String
+    prioridad = db.Column(db.String(50))
+    clasificacion = db.Column(db.String(100))
+    sentimiento = db.Column(db.String(50))
+    urgencia = db.Column(db.String(50))
     resumen = db.Column(db.Text)
     tags = db.Column(db.String(255))
-    cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'))
+    cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id_cliente'))
     id_sac_asignado = db.Column(db.Integer, db.ForeignKey('usuario.id'))
-
+    mensajes = db.relationship('Mensaje', backref='ticket', lazy=True)
 
 class Mensaje(db.Model):
     __tablename__ = 'mensaje'
