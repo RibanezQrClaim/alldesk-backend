@@ -126,14 +126,14 @@ def seed_db_command():
 
     user1 = Usuario(nombre="Juan Pérez", rol="Agente SAC")
     user2 = Usuario(nombre="Maria Gonzalez", rol="Agente SAC")
-    
+
     ticket1 = Ticket(
         id_publico="T-001",
         tipo="Reclamo",
         cliente_nombre="Constructora XYZ",
         asunto="Falla en sistema de riego",
-        agente_asignado=user1,
-        canal_nombre="Email"
+        canal_nombre="Email",
+        id_sac_asignado=None
     )
 
     ticket2 = Ticket(
@@ -141,18 +141,23 @@ def seed_db_command():
         tipo="Consulta",
         cliente_nombre="Clínica Sonrisa",
         asunto="Info sobre plan de mantención",
-        agente_asignado=user2,
-        canal_nombre="Formulario Web"
+        canal_nombre="Formulario Web",
+        id_sac_asignado=None
     )
 
-    msg1_t1 = Mensaje(contenido="Mi pedido no ha llegado a tiempo.", es_privado=False, ticket_asociado=ticket1)
-    msg2_t1 = Mensaje(contenido="Revisando estado del despacho con courier.", es_privado=True, ticket_asociado=ticket1, autor=user1)
-    msg1_t2 = Mensaje(contenido="Quisiera saber el precio del servicio Plus.", es_privado=False, ticket_asociado=ticket2)
-    msg2_t2 = Mensaje(contenido="Hola, el plan Plus cuesta $79 USD/mes.", es_privado=False, ticket_asociado=ticket2, autor=user2)
-    
-    db.session.add_all([user1, user2, ticket1, ticket2, msg1_t1, msg2_t1, msg1_t2, msg2_t2])
+    db.session.add_all([user1, user2, ticket1, ticket2])
+    db.session.flush()  # ← aquí para obtener los .id
+
+    msg1_t1 = Mensaje(contenido="Mi pedido no ha llegado a tiempo.", es_privado=False, id_ticket=ticket1.id)
+    msg2_t1 = Mensaje(contenido="Revisando estado del despacho con courier.", es_privado=True, id_ticket=ticket1.id, id_usuario_autor=user1.id_usuario)
+
+    msg1_t2 = Mensaje(contenido="Quisiera saber el precio del servicio Plus.", es_privado=False, id_ticket=ticket2.id)
+    msg2_t2 = Mensaje(contenido="Hola, el plan Plus cuesta $79 USD/mes.", es_privado=False, id_ticket=ticket2.id, id_usuario_autor=user2.id_usuario)
+
+    db.session.add_all([msg1_t1, msg2_t1, msg1_t2, msg2_t2])
     db.session.commit()
     print("Base de datos reiniciada y poblada con datos de ejemplo.")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
