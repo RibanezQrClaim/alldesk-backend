@@ -38,9 +38,11 @@ def procesar_ticket_entrante(remitente, asunto, cuerpo, canal):
         id_sac_asignado=None
     )
 
-    primer_mensaje = Mensaje(contenido=cuerpo, ticket_asociado=nuevo_ticket)
+   
 
     db.session.add(nuevo_ticket)
+    db.session.flush()  # asegura que nuevo_ticket.id exista
+    primer_mensaje = Mensaje(contenido=cuerpo, id_ticket=nuevo_ticket.id)
     db.session.add(primer_mensaje)
     db.session.commit()
 
