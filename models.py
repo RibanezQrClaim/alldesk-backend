@@ -35,7 +35,8 @@ class Ticket(db.Model):
     resumen = db.Column(db.Text)
     tags = db.Column(db.String(255))
     cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id_cliente'))
-    id_sac_asignado = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    id_sac_asignado = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'))  ✅
+
     mensajes = db.relationship('Mensaje', backref='ticket', lazy=True)
 
 class Mensaje(db.Model):
