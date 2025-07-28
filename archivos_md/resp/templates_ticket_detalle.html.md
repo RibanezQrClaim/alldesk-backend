@@ -9,17 +9,16 @@
     <style>
         body { font-family: sans-serif; display: flex; margin: 0; }
         .main-content { flex-grow: 1; padding: 2em; }
-        .sidebar { width: 300px; background-color: #f2f2f2; padding: 1.5em; border-left: 1px solid #ccc; height: 100vh; overflow-y: auto; }
+        .sidebar { width: 300px; background-color: #f2f2f2; padding: 1.5em; border-left: 1px solid #ccc; height: 100vh; }
         .chat-container { border: 1px solid #ccc; padding: 1em; margin-bottom: 20px; max-height: 500px; overflow-y: auto; }
         .mensaje { margin-bottom: 15px; padding: 10px; border-radius: 8px; max-width: 80%; }
         .mensaje p { margin: 0; }
         .mensaje .meta { font-size: 0.8em; color: #555; margin-top: 5px; }
         .mensaje-publico { background-color: #e1f5fe; }
-        .mensaje-privado { background-color: #fff9c4; border: 1px dashed #fbc02d; }
-        .mensaje-privado .meta::before { content: '🔒 '; font-family: sans-serif; }
+        .mensaje-privado { background-color: #fff9c4; border: 1px dashed #fbc02d; } /* Nota interna amarilla */
+        .mensaje-privado .meta::before { content: '🔒 '; font-family: sans-serif; } /* Ícono de candado */
         textarea { width: 100%; box-sizing: border-box; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
         .info-ticket p { margin: 8px 0; }
-        .tag { display: inline-block; background-color: #007bff; color: white; padding: 3px 8px; border-radius: 10px; font-size: 0.85em; margin-right: 5px; }
         a { color: #007bff; text-decoration: none; }
         a:hover { text-decoration: underline; }
     </style>
@@ -34,7 +33,9 @@
         <div class="chat-container">
             {% for mensaje in ticket.historial %}
                 <div class="mensaje {% if mensaje.es_privado %}mensaje-privado{% else %}mensaje-publico{% endif %}">
+                    
                     <p><strong>{{ mensaje.autor.nombre if mensaje.autor else 'Cliente' }}:</strong></p>
+
                     <p>{{ mensaje.contenido }}</p>
                     <p class="meta">{{ mensaje.fecha_envio.strftime('%Y-%m-%d %H:%M') }}</p>
                 </div>
@@ -57,33 +58,13 @@
         <div class="info-ticket">
             <p><strong>ID:</strong> {{ ticket.id_publico }}</p>
             <p><strong>Tipo:</strong> {{ ticket.tipo }}</p>
-            <p><strong>Prioridad:</strong> {{ ticket.prioridad }}</p>
-            <p><strong>Clasificación:</strong> {{ ticket.clasificacion }}</p>
-            <p><strong>Sentimiento:</strong> {{ ticket.sentimiento }}</p>
-            <p><strong>Urgencia:</strong> {{ ticket.urgencia }}</p>
-            <p><strong>Resumen:</strong> {{ ticket.resumen }}</p>
-            <p><strong>Tags:</strong><br>
-                {% if ticket.tags %}
-                    {% for tag in ticket.tags.split(',') %}
-                        <span class="tag">{{ tag.strip() }}</span>
-                    {% endfor %}
-                {% else %}
-                    <span style="color: gray;">Sin tags</span>
-                {% endif %}
-            </p>
             <p><strong>Cliente:</strong> {{ ticket.cliente_nombre }}</p>
             <p><strong>Canal:</strong> {{ ticket.canal_nombre }}</p>
             <p><strong>Estado:</strong> {{ ticket.estado }}</p>
-            {% if ticket.agente_asignado %}
-                <p><strong>Asignado a:</strong> {{ ticket.agente_asignado.nombre }}</p>
-            {% else %}
-                <p><strong>Asignado a:</strong> No asignado</p>
-            {% endif %}
+            <p><strong>Asignado a:</strong> {{ ticket.agente_asignado.nombre if ticket.agente_asignado else 'No asignado' }}</p>
         </div>
     </div>
 
 </body>
 </html>
-
-
 ```

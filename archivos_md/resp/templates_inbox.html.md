@@ -13,10 +13,6 @@
         th { background-color: #f0f0f0; }
         a { color: #007bff; text-decoration: none; }
         a:hover { text-decoration: underline; }
-        .urgente { color: red; font-weight: bold; }
-        .neutral { color: gray; }
-        .positivo { color: green; }
-        .negativo { color: darkred; }
     </style>
 </head>
 <body>
@@ -28,15 +24,11 @@
             + Crear Nuevo Ticket
         </a>
     </div>
-
     <table>
         <thead>
             <tr>
                 <th>Ticket</th>
                 <th>Tipo</th>
-                <th>Prioridad</th>
-                <th>Urgencia</th>
-                <th>Sentimiento</th>
                 <th>Fecha Creación</th>
                 <th>Cliente</th>
                 <th>Asunto</th>
@@ -51,9 +43,6 @@
             <tr>
                 <td><a href="{{ url_for('ver_ticket', ticket_id_publico=ticket.id_publico) }}">{{ ticket.id_publico }}</a></td>
                 <td>{{ ticket.tipo }}</td>
-                <td>{{ ticket.prioridad }}</td>
-                <td class="{% if ticket.urgencia >= 4 %}urgente{% endif %}">{{ ticket.urgencia }}</td>
-                <td class="{{ ticket.sentimiento|lower }}">{{ ticket.sentimiento }}</td>
                 <td>{{ ticket.fecha_creacion.strftime('%Y-%m-%d %H:%M') }}</td>
                 <td>{{ ticket.cliente_nombre }}</td>
                 <td>{{ ticket.asunto }}</td>
@@ -68,5 +57,4 @@
 
 </body>
 </html>
-
 ```

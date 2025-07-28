@@ -1,0 +1,56 @@
+### .\templates\nuevo_ticket.html
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Nuevo Ticket - AllDesk.ai</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em auto; max-width: 600px; }
+        .form-group { margin-bottom: 1em; }
+        label { display: block; margin-bottom: 0.5em; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;}
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        a { color: #007bff; }
+    </style>
+</head>
+<body>
+    <h1>Crear Nuevo Ticket</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="cliente_nombre">Nombre del Cliente</label>
+            <input type="text" id="cliente_nombre" name="cliente_nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="asunto">Asunto</label>
+            <input type="text" id="asunto" name="asunto" required>
+        </div>
+        <div class="form-group">
+            <label for="tipo">Tipo de Ticket</label>
+            <select id="tipo" name="tipo">
+                <option value="Consulta">Consulta</option>
+                <option value="Reclamo">Reclamo</option>
+                <option value="Sugerencia">Sugerencia</option>
+                <option value="Felicitación">Felicitación</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="canal_nombre">Canal</label>
+            <input type="text" id="canal_nombre" name="canal_nombre" placeholder="Ej: Teléfono, Email...">
+        </div>
+        <div class="form-group">
+            <label for="id_sac_asignado">Asignar a Agente</label>
+            <select id="id_sac_asignado" name="id_sac_asignado">
+                <option value="">-- No asignar --</option>
+                {% for agente in agentes %}
+                    <option value="{{ agente.id_usuario }}">{{ agente.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">Crear Ticket</button>
+    </form>
+    <p><a href="{{ url_for('pagina_principal') }}">Cancelar</a></p>
+</body>
+</html>
+```
