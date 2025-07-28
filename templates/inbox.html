@@ -10,10 +10,21 @@
         th { background-color: #f0f0f0; }
         a { color: #007bff; text-decoration: none; }
         a:hover { text-decoration: underline; }
+
         .urgente { color: red; font-weight: bold; }
         .neutral { color: gray; }
         .positivo { color: green; }
         .negativo { color: darkred; }
+
+        .urgencia-1 { background-color: #d4edda; }    /* verde claro */
+        .urgencia-2 { background-color: #fff3cd; }    /* amarillo */
+        .urgencia-3 { background-color: #ffeeba; }    /* naranjo */
+        .urgencia-4, .urgencia-5 { background-color: #f8d7da; font-weight: bold; }  /* rojo claro */
+
+        .prioridad-baja { color: gray; }
+        .prioridad-normal { color: #007bff; }
+        .prioridad-alta { color: #d39e00; }
+        .prioridad-critica { color: red; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -48,8 +59,10 @@
             <tr>
                 <td><a href="{{ url_for('ver_ticket', ticket_id_publico=ticket.id_publico) }}">{{ ticket.id_publico }}</a></td>
                 <td>{{ ticket.tipo }}</td>
-                <td>{{ ticket.prioridad }}</td>
-                <td class="{% if ticket.urgencia and ticket.urgencia.isdigit() and ticket.urgencia|int >= 4 %}urgente{% endif %}">{{ ticket.urgencia }}</td>
+                <td class="prioridad-{{ ticket.prioridad|lower }}">{{ ticket.prioridad }}</td>
+                <td class="{% if ticket.urgencia and ticket.urgencia.isdigit() %}urgencia-{{ ticket.urgencia }}{% endif %}">
+                    {{ ticket.urgencia }}
+                </td>
                 <td class="{{ ticket.sentimiento|lower }}">{{ ticket.sentimiento }}</td>
                 <td>{{ ticket.fecha_creacion.strftime('%Y-%m-%d %H:%M') }}</td>
                 <td>{{ ticket.cliente_nombre }}</td>
